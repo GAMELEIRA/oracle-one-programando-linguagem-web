@@ -171,7 +171,6 @@ calcularImcs();
 
 let titulo = document.querySelector("h1");
 
-
 titulo.addEventListener("click", (event) => {
 
     event.preventDefault();
@@ -181,18 +180,164 @@ titulo.addEventListener("click", (event) => {
 
 })
 
-const botao = document.getElementById("adicionar-paciente");
+const botao = document.querySelector("#adicionar-paciente");
 
-console.log(botao);
+function buscarValorTag(tag) {
+
+    return tag.value;
+
+}
+
+function buscarFormulario() {
+
+    return document.querySelector("#form-adiciona");
+
+}
+
+function buscarNome(formulario) {
+
+    return document.getElementById("nome");
+
+}
+
+function buscarAltura(formulario) {
+
+    return formulario.querySelector("#altura");
+
+}
+
+function buscarPeso(formulario) {
+
+    return formulario.querySelector("#peso");
+
+}
+
+function buscarGrupo(formulario) {
+
+    return formulario.querySelector("#gordura");
+
+}
+
+function criarTr() {
+
+    const td = document.createElement("tr");
+
+    return td;
+
+}
+
+function criarTd() {
+
+    const tr = document.createElement("td");
+
+    return tr;
+
+}
+
+function addClasseEstilo(tag, classe) {
+
+    tag.classList.add(classe);
+
+}
+
+function appendar(pai, filho) {
+
+    pai.appendChild(filho);
+
+}
+
+function buscarTabela() {
+
+    return document.querySelector("#tabela-pacientes");
+
+}
 
 botao.onclick = function (e) {
 
-    alert("OI")
-
     e.preventDefault();
 
-    console.log("OI");
+    const formulario = buscarFormulario();
+
+    const inNome = buscarNome(formulario);
+
+    const inAltura = buscarAltura(formulario);
+
+    const inPeso = buscarPeso(formulario);
+
+    const inGrupo = buscarGrupo(formulario);
+
+    const nome = buscarValorTag(inNome);
+
+    let altura = buscarValorTag(inAltura);
+
+    let peso = buscarValorTag(inPeso);
+
+    let gordura = buscarValorTag(inGrupo);
+
+    let tabela = buscarTabela();
+
+    const tr = criarTr();
+
+    addClasseEstilo(tr, "paciente");
+
+    const alturaValida = validarAltura(altura);
+
+    const pesoValido = validarPeso(peso);
+
+    const calcularImcPermitido = validarCalculoImc(pesoValido, alturaValida);
+
+    if (!alturaValida) {
+
+        let erro = document.querySelector("#erro");
+
+        erro.textContent = "Altura inválida!";
+
+        altura = "ALTURA INVALIDA!"
+
+    }
+
+    if (!pesoValido) {
+
+        peso = "PESO INVALIDO!";
+    }
+
+    if (calcularImcPermitido) {
+
+        imc = calcularImcPaciente(peso, altura);
+
+
+    } else {
+
+        imc = "IMC INVÁLIDO!";
+
+        invalidarPaciente(tr);
+
+    }
+
+
+    const paciente = [nome, peso, altura, gordura, imc];
+
+    const classes = ["info-nome", "info-peso", "info-altura", "info-gordura", "info-imc"]
+
+    for (let i = 0; i < paciente.length; i++) {
+
+        let td = criarTd();
+
+        addClasseEstilo(td, classes[i]);
+
+        td.textContent = paciente[i];
+
+        appendar(tr, td);
+
+        appendar(tabela, tr);
+
+        console.log(td)
+
+    }
+
+    formulario.reset();
 
 }
 
 
+// URL.innerHTML = "" document.querySelector("#alura").innerHTML = "Novo texto"
